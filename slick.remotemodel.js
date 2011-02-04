@@ -99,7 +99,13 @@
 		}
 
 		function onSuccess(resp) {
-			var from = this.fromPage*PAGESIZE, to = from + resp.count;
+			if (typeof resp.offset == "undefined" || resp.offset == null) {
+				resp.offset = this.fromPage*PAGESIZE;
+			}
+			if (typeof resp.count == "undefined" || resp.count == null) {
+				resp.count = resp.items.length;
+			}
+			var from = resp.offset, to = from + resp.count;
 			data.length = parseInt(resp.total);
 
 			for (var i = 0; i < resp[responseItemListName].length; i++) {
